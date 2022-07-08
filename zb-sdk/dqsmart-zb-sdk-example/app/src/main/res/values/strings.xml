@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DQSmart Zigbee Demo</string>
+    <string name="status_on">On</string>
+    <string name="status_off">Off</string>
+    <string name="tung">Tung</string>
+    <string name="hello">Hello</string>
+    <string name="dummy_text">Lorem ipsum is simply dummy text of the printing and typesetting industry</string>
+</resources>

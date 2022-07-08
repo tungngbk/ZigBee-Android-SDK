@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Accept device
+    <usb-device vendor-id="1234" product-id="5678" class="255" subclass="66" protocol="1" />
+     deviceVID: 0x10C4 (4292), devicePID: 0xEA60 (60000)
+    -->
+<!--    <usb-device vendor-id="1234" product-id="5678" class="255" subclass="66" protocol="1" />-->
+    <usb-device vendor-id="4292" product-id="60000" />
+</resources>

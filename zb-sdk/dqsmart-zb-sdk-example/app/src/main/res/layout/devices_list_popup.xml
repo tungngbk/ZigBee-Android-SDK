@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_gravity="center"
+        android:background="@drawable/popup_background"
+>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp" android:id="@+id/linearLayout">
+
+        <TextView
+                android:id="@+id/text_dev_model_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:text="Model ID"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/text_dev_mac_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:text="MAC Address"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/text_dev_src_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:text="Short Address"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/text_dev_endpoint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:text="Endpoint"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:id="@+id/text_dev_state"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:text="Status"
+                android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_device_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+    />
+
+</RelativeLayout>

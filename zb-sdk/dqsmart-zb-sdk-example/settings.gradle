@@ -1,0 +1,3 @@
+include ':dqsmart-zigbee'
+include ':app'
+rootProject.name = "DQSmart Zigbee SDK Example"
