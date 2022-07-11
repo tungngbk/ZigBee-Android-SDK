@@ -145,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
             if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
                 ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
                 if(mDeviceAdapter.getmListener() != null){
-                    Toast.makeText(this, "vo lan 3", Toast.LENGTH_LONG).show();
                     mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
                 }
             }
@@ -154,6 +153,16 @@ public class MainActivity extends AppCompatActivity {
             setResult(Activity.RESULT_OK, data);
             finish();
         }
+
+        // Reset Factory
+        mResetFactory = findViewById(R.id.layoutReset);
+        mResetFactory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DqsZbNwkManager.getInstance().resetFactory();
+                Toast.makeText(MainActivity.this, "Reset successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private DeviceListAdapter.OnDeviceListClickListener mOnDeviceListClickListener = new DeviceListAdapter.OnDeviceListClickListener() {
