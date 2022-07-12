@@ -28,6 +28,25 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         void onDeviceStatusClick(ZigbeeDevice zigbeeDevice, int newStatus);
     }
 
+    private int checkPosition;
+    private String newDevName;
+
+    public int getCheckPosition() {
+        return checkPosition;
+    }
+
+    public void setCheckPosition(int checkPosition) {
+        this.checkPosition = checkPosition;
+    }
+
+    public String getNewDevName() {
+        return newDevName;
+    }
+
+    public void setNewDevName(String newDevName) {
+        this.newDevName = newDevName;
+    }
+
     private Context mContext;
     private List<ZigbeeDevice> mZigbeeDevices;
     private ConcurrentMap<String, Integer> mDevStatusMap;
@@ -80,17 +99,27 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     @NonNull
     @Override
     public DeviceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_list_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.new_device_list_item, parent, false);
         return new DeviceViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
         final ZigbeeDevice zigbeeDevice = mZigbeeDevices.get(position);
+        String thisDeviceName = "Device " + (position +1);
+        holder.devNameText.setText(thisDeviceName);
+        if(this.newDevName != null){
+//            Toast.makeText(mContext, "toi day", Toast.LENGTH_SHORT).show();
+            if(this.checkPosition == position){
+//                Toast.makeText(mContext, "toi day nua", Toast.LENGTH_SHORT).show();
+                thisDeviceName = this.newDevName;
+                holder.devNameText.setText(thisDeviceName);
+            }
+        }
         holder.devModelIdText.setText(zigbeeDevice.getModelId());
-        holder.devMacAddressText.setText(String.format("%016X", zigbeeDevice.getMacAddress()));
-        holder.devSrcAddressText.setText(String.format("%04X", zigbeeDevice.getSrcAddress()));
-        holder.devEndpointText.setText(String.valueOf(zigbeeDevice.getEndpoint()));
+//        holder.devMacAddressText.setText(String.format("%016X", zigbeeDevice.getMacAddress()));
+//        holder.devSrcAddressText.setText(String.format("%04X", zigbeeDevice.getSrcAddress()));
+//        holder.devEndpointText.setText(String.valueOf(zigbeeDevice.getEndpoint()));
         holder.devStatusText.setVisibility(View.VISIBLE);
         if (zigbeeDevice.getDeviceType() == ZigbeeDeviceInfo.DEVICE_TYPE_LIGHT || zigbeeDevice.getDeviceType() == ZigbeeDeviceInfo.DEVICE_TYPE_SWITCH) {
             final int value = mDevStatusMap.get(getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint())) == null
@@ -99,6 +128,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             final String devStatus = (isOn != null && isOn) ?
                     mContext.getString(R.string.status_on) : mContext.getString(R.string.status_off);
             holder.devStatusText.setText(devStatus);
+            String finalThisDeviceName = thisDeviceName;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -112,6 +142,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
                     Intent intent = new Intent(view.getContext(), ControllerActivity.class);
                     intent.putExtra("isOn", isOn);
                     intent.putExtra("position", holder.getAdapterPosition());
+                    intent.putExtra("deviceName", finalThisDeviceName);
                     view.getContext().startActivity(intent);
                 }
             });
@@ -158,20 +189,30 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     }
 
     public static class DeviceViewHolder extends RecyclerView.ViewHolder {
-
+        TextView devNameText;
         TextView devModelIdText;
-        TextView devMacAddressText;
-        TextView devSrcAddressText;
-        TextView devEndpointText;
         TextView devStatusText;
 
-        public DeviceViewHolder(@NonNull View itemView) {
+        public DeviceViewHolder(@NonNull View itemView){
             super(itemView);
+            devNameText = itemView.findViewById(R.id.text_dev_name);
             devModelIdText = itemView.findViewById(R.id.text_dev_model_id);
-            devMacAddressText = itemView.findViewById(R.id.text_dev_mac_address);
-            devSrcAddressText = itemView.findViewById(R.id.text_dev_src_address);
-            devEndpointText = itemView.findViewById(R.id.text_dev_endpoint);
             devStatusText = itemView.findViewById(R.id.text_dev_status);
         }
+
+//        TextView devModelIdText;
+//        TextView devMacAddressText;
+//        TextView devSrcAddressText;
+//        TextView devEndpointText;
+//        TextView devStatusText;
+//
+//        public DeviceViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//            devModelIdText = itemView.findViewById(R.id.text_dev_model_id);
+//            devMacAddressText = itemView.findViewById(R.id.text_dev_mac_address);
+//            devSrcAddressText = itemView.findViewById(R.id.text_dev_src_address);
+//            devEndpointText = itemView.findViewById(R.id.text_dev_endpoint);
+//            devStatusText = itemView.findViewById(R.id.text_dev_status);
+//        }
     }
 }

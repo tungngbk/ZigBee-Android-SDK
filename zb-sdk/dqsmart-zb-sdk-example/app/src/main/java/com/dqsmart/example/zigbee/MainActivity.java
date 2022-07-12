@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,8 +26,11 @@ import com.dqsmart.zigbee.cache.CacheManager;
 import com.dqsmart.zigbee.core.device.DeviceModel;
 import com.dqsmart.zigbee.core.device.ZigbeeDevice;
 import com.dqsmart.zigbee.core.device.ZigbeeDeviceInfo;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +60,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // New
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.menuHome);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.menuHome:
+                        return true;
+                    case R.id.menuVoice:
+                        startActivity(new Intent(getApplicationContext(), VoiceActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
+
+
+        //
         mHandler = new Handler(Looper.getMainLooper());
         DqsZbNwkManager.getInstance().setLogLevel(LogManager.LOG_DEBUG);
         DqsZbNwkManager.getInstance().registerCallback(mZbCallback);
@@ -87,10 +113,19 @@ public class MainActivity extends AppCompatActivity {
 
         // Start paring with Model
         List<String> list = new ArrayList<String>();
-        list.add(DeviceModel.ZB_DOOR_LOCK);
-        list.add(DeviceModel.ZB_RE6_SWITCH);
-        list.add(DeviceModel.ZB_SMOKE_SENSOR);
-        list.add(DeviceModel.ZB_SMART_SOCKET);
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("SMART SOCKET", DeviceModel.ZB_SMART_SOCKET);
+        hashMap.put("DOOR LOCK", DeviceModel.ZB_DOOR_LOCK);
+        hashMap.put("RE6 SWITCH", DeviceModel.ZB_RE6_SWITCH);
+        hashMap.put("SMOKE SENSOR", DeviceModel.ZB_SMOKE_SENSOR);
+//        list.add(DeviceModel.ZB_SMART_SOCKET);
+//        list.add(DeviceModel.ZB_DOOR_LOCK);
+//        list.add(DeviceModel.ZB_RE6_SWITCH);
+//        list.add(DeviceModel.ZB_SMOKE_SENSOR);
+        list.add("SMART SOCKET");
+        list.add("DOOR LOCK");
+        list.add("RE6 SWITCH");
+        list.add("SMOKE SENSOR");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -110,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 modelSelectedButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        final String modelId = (String) mModelList.getSelectedItem();
+                        final String modelId = (String) hashMap.get(mModelList.getSelectedItem());
                         Log.d(TAG, "get model id: " + modelId);
                         Toast.makeText(MainActivity.this, "Select model " + modelId, Toast.LENGTH_SHORT).show();
                         DqsZbNwkManager.getInstance().addDeviceByModel(modelId, 60, mAddDeviceCallBack);
@@ -137,6 +172,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if(getIntent().hasExtra("newDeviceName")){
+            String newDeviceName = getIntent().getStringExtra("newDeviceName");
+            int position = getIntent().getIntExtra("position",0);
+            if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
+                ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
+                mDeviceAdapter.setCheckPosition(position);
+                mDeviceAdapter.setNewDevName(newDeviceName);
+            }
+//            Intent data = new Intent();
+//            data.putExtra(EXTRA_DATA, "nhan r he");
+//            setResult(Activity.RESULT_OK, data);
+//            finish();
+        }
 
         if(getIntent().hasExtra("newStatus")){
             int newStatus = getIntent().getBooleanExtra("newStatus", false) ? 1 : 0;

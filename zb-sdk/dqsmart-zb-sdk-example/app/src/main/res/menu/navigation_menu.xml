@@ -5,9 +5,9 @@
           android:icon="@drawable/ic_home"
           android:title="Home" />
 
-    <item android:id="@+id/menuFavorite"
-          android:icon="@drawable/ic_favorite"
-          android:title="Favorite" />
+    <item android:id="@+id/menuVoice"
+          android:icon="@drawable/ic_voice"
+          android:title="Voice" />
 
     <item android:id="@+id/menuAccount"
           android:icon="@drawable/ic_account_circle"

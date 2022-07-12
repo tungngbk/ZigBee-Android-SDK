@@ -123,7 +123,7 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="Get Device Info"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -154,7 +154,7 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="Start Pairing"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -184,7 +184,7 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="Reset Factory"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -215,7 +215,7 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="List Devices"
                         android:textSize="20sp"
                         android:textStyle="bold" />
