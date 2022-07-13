@@ -2,6 +2,7 @@ package com.dqsmart.example.zigbee;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,8 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
-    int selectedPosition = -1;
-
     public interface OnDeviceListClickListener {
         void onDeviceStatusClick(ZigbeeDevice zigbeeDevice, int newStatus);
     }
@@ -47,9 +46,19 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         this.newDevName = newDevName;
     }
 
-    private Context mContext;
+    Context mContext;
+
+    public Context getmContext() {
+        return mContext;
+    }
+
     private List<ZigbeeDevice> mZigbeeDevices;
-    private ConcurrentMap<String, Integer> mDevStatusMap;
+    private ConcurrentHashMap<String, Integer> mDevStatusMap;
+
+    public void setmDevStatusMap(ConcurrentHashMap<String, Integer> mDevStatusMap) {
+        this.mDevStatusMap = mDevStatusMap;
+    }
+
     private OnDeviceListClickListener mListener;
 
     public List<ZigbeeDevice> getmZigbeeDevices() {
@@ -60,7 +69,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         return mListener;
     }
 
-    public ConcurrentMap<String, Integer> getmDevStatusMap() {
+    public ConcurrentHashMap<String, Integer> getmDevStatusMap() {
         return mDevStatusMap;
     }
 
@@ -105,6 +114,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
+
         final ZigbeeDevice zigbeeDevice = mZigbeeDevices.get(position);
         String thisDeviceName = "Device " + (position +1);
         holder.devNameText.setText(thisDeviceName);
@@ -120,7 +130,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 //        holder.devMacAddressText.setText(String.format("%016X", zigbeeDevice.getMacAddress()));
 //        holder.devSrcAddressText.setText(String.format("%04X", zigbeeDevice.getSrcAddress()));
 //        holder.devEndpointText.setText(String.valueOf(zigbeeDevice.getEndpoint()));
-        holder.devStatusText.setVisibility(View.VISIBLE);
+//        holder.devStatusText.setVisibility(View.VISIBLE);
         if (zigbeeDevice.getDeviceType() == ZigbeeDeviceInfo.DEVICE_TYPE_LIGHT || zigbeeDevice.getDeviceType() == ZigbeeDeviceInfo.DEVICE_TYPE_SWITCH) {
             final int value = mDevStatusMap.get(getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint())) == null
                     ? 0 : mDevStatusMap.get(getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()));

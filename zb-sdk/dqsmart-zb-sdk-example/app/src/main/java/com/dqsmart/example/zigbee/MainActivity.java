@@ -3,7 +3,9 @@ package com.dqsmart.example.zigbee;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -32,6 +34,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DATA = "EXTRA_DATA";
@@ -60,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences statusMap = getSharedPreferences("statusMap", Context.MODE_PRIVATE);
+        SharedPreferences devName = getSharedPreferences("devName", Context.MODE_PRIVATE);
 
         // New
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -90,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
         mDeviceAdapter = new DeviceListAdapter(getApplicationContext());
         mDeviceAdapter.setHasStableIds(true);
         mDeviceAdapter.setOnDeviceListClickListener(mOnDeviceListClickListener);
+        Map<String, Integer> map = (Map<String, Integer>) statusMap.getAll();
 
+        mDeviceAdapter.setmDevStatusMap(new ConcurrentHashMap<String, Integer>(map));
 
 //
 //        mDeviceAdapter.setZigbeeDevices(CacheManager.getInstance().getAllDevices());
@@ -188,8 +197,12 @@ public class MainActivity extends AppCompatActivity {
 
         if(getIntent().hasExtra("newStatus")){
             int newStatus = getIntent().getBooleanExtra("newStatus", false) ? 1 : 0;
-            mDeviceAdapter.getmDevStatusMap().put(String.format("%04X", R.id.text_dev_src_address) + "." + R.id.text_dev_endpoint, newStatus);
             int position = getIntent().getIntExtra("position",0);
+            SharedPreferences.Editor editor = statusMap.edit();
+            editor.putInt(String.format("%04X", mDeviceAdapter.getmZigbeeDevices().get(position).getSrcAddress()) + "." + mDeviceAdapter.getmZigbeeDevices().get(position).getEndpoint(), newStatus);
+            editor.commit();
+            mDeviceAdapter.getmDevStatusMap().put(String.format("%04X", mDeviceAdapter.getmZigbeeDevices().get(position).getSrcAddress()) + "." + mDeviceAdapter.getmZigbeeDevices().get(position).getEndpoint(), newStatus);
+
             if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
                 ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
                 if(mDeviceAdapter.getmListener() != null){
