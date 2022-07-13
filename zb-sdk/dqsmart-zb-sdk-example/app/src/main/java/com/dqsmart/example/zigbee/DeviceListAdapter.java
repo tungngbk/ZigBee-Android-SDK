@@ -54,9 +54,18 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
     private List<ZigbeeDevice> mZigbeeDevices;
     private ConcurrentHashMap<String, Integer> mDevStatusMap;
+    private ConcurrentHashMap<String, String> mDevNameMap;
 
     public void setmDevStatusMap(ConcurrentHashMap<String, Integer> mDevStatusMap) {
         this.mDevStatusMap = mDevStatusMap;
+    }
+
+    public void setmDevNameMap(ConcurrentHashMap<String, String> mDevNameMap) {
+        this.mDevNameMap = mDevNameMap;
+    }
+
+    public ConcurrentHashMap<String, String> getmDevNameMap() {
+        return mDevNameMap;
     }
 
     private OnDeviceListClickListener mListener;
@@ -114,18 +123,22 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
-
         final ZigbeeDevice zigbeeDevice = mZigbeeDevices.get(position);
-        String thisDeviceName = "Device " + (position +1);
-        holder.devNameText.setText(thisDeviceName);
-        if(this.newDevName != null){
-//            Toast.makeText(mContext, "toi day", Toast.LENGTH_SHORT).show();
-            if(this.checkPosition == position){
-//                Toast.makeText(mContext, "toi day nua", Toast.LENGTH_SHORT).show();
-                thisDeviceName = this.newDevName;
-                holder.devNameText.setText(thisDeviceName);
-            }
+
+        if(this.mDevNameMap.containsKey(getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()))){
+            holder.devNameText.setText(this.mDevNameMap.get(getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint())));
         }
+        else {
+            holder.devNameText.setText("chua dat ten");
+        }
+//        if(this.newDevName != null){
+////            Toast.makeText(mContext, "toi day", Toast.LENGTH_SHORT).show();
+//            if(this.checkPosition == position){
+////                Toast.makeText(mContext, "toi day nua", Toast.LENGTH_SHORT).show();
+//                thisDeviceName = this.newDevName;
+//                holder.devNameText.setText(thisDeviceName);
+//            }
+//        }
         holder.devModelIdText.setText(zigbeeDevice.getModelId());
 //        holder.devMacAddressText.setText(String.format("%016X", zigbeeDevice.getMacAddress()));
 //        holder.devSrcAddressText.setText(String.format("%04X", zigbeeDevice.getSrcAddress()));
@@ -138,7 +151,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             final String devStatus = (isOn != null && isOn) ?
                     mContext.getString(R.string.status_on) : mContext.getString(R.string.status_off);
             holder.devStatusText.setText(devStatus);
-            String finalThisDeviceName = thisDeviceName;
+            String finalThisDeviceName = this.mDevNameMap.get(getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -153,6 +166,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
                     intent.putExtra("isOn", isOn);
                     intent.putExtra("position", holder.getAdapterPosition());
                     intent.putExtra("deviceName", finalThisDeviceName);
+                    intent.putExtra("deviceKey",getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()));
                     view.getContext().startActivity(intent);
                 }
             });

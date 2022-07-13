@@ -60,13 +60,16 @@ public class MainActivity extends AppCompatActivity {
     private List<ZigbeeDevice> mZigbeeDevices = new ArrayList<>();
     private DeviceListAdapter mDeviceAdapter;
     private RecyclerView mDeviceListView;
+    private SharedPreferences statusMap;
+    private SharedPreferences devName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences statusMap = getSharedPreferences("statusMap", Context.MODE_PRIVATE);
-        SharedPreferences devName = getSharedPreferences("devName", Context.MODE_PRIVATE);
+        statusMap = getSharedPreferences("statusMap", Context.MODE_PRIVATE);
+        devName = getSharedPreferences("devName", Context.MODE_PRIVATE);
 
         // New
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -98,8 +101,10 @@ public class MainActivity extends AppCompatActivity {
         mDeviceAdapter.setHasStableIds(true);
         mDeviceAdapter.setOnDeviceListClickListener(mOnDeviceListClickListener);
         Map<String, Integer> map = (Map<String, Integer>) statusMap.getAll();
+        Map<String, String> nameMap = (Map<String, String>) devName.getAll();
 
         mDeviceAdapter.setmDevStatusMap(new ConcurrentHashMap<String, Integer>(map));
+        mDeviceAdapter.setmDevNameMap(new ConcurrentHashMap<String, String>(nameMap));
 
 //
 //        mDeviceAdapter.setZigbeeDevices(CacheManager.getInstance().getAllDevices());
@@ -181,19 +186,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(getIntent().hasExtra("newDeviceName")){
-            String newDeviceName = getIntent().getStringExtra("newDeviceName");
-            int position = getIntent().getIntExtra("position",0);
-            if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
-                ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
-                mDeviceAdapter.setCheckPosition(position);
-                mDeviceAdapter.setNewDevName(newDeviceName);
-            }
+//        if(getIntent().hasExtra("newDeviceName")){
+//            String newDeviceName = getIntent().getStringExtra("newDeviceName");
+//            int position = getIntent().getIntExtra("position",0);
+//            if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
+//                ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
+//                mDeviceAdapter.setCheckPosition(position);
+//                mDeviceAdapter.setNewDevName(newDeviceName);
+//            }
+////            Intent data = new Intent();
+////            data.putExtra(EXTRA_DATA, "nhan r he");
+////            setResult(Activity.RESULT_OK, data);
+////            finish();
+//        }
+//        if(getIntent().hasExtra("checkName")){
+//            Map<String, String> nameMap1 = (Map<String, String>) devName.getAll();
+//            mDeviceAdapter.setmDevNameMap(new ConcurrentHashMap<String, String>(nameMap1));
+//
 //            Intent data = new Intent();
-//            data.putExtra(EXTRA_DATA, "nhan r he");
+//            data.putExtra(EXTRA_DATA, "ok ne");
 //            setResult(Activity.RESULT_OK, data);
 //            finish();
-        }
+//        }
+
 
         if(getIntent().hasExtra("newStatus")){
             int newStatus = getIntent().getBooleanExtra("newStatus", false) ? 1 : 0;
@@ -279,6 +294,12 @@ public class MainActivity extends AppCompatActivity {
         public void onResult(List<ZigbeeDevice> list) {
             Log.d(TAG, "On add device result: " + list);
             List<ZigbeeDevice> newDevices = new ArrayList<>(list);
+            for(ZigbeeDevice item: newDevices){
+                SharedPreferences.Editor editor = devName.edit();
+                editor.putString(String.format("%04X", item.getSrcAddress()) + "." + item.getEndpoint(), "New Device");
+                editor.commit();
+                mDeviceAdapter.getmDevNameMap().put(String.format("%04X", item.getSrcAddress()) + "." + item.getEndpoint(), "New Device");
+            }
             mZigbeeDevices.addAll(newDevices);
             mHandler.post(new Runnable() {
                 @Override

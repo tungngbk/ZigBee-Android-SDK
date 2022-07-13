@@ -98,15 +98,26 @@ public class ControllerActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         newDeviceName = textRename.getText().toString();
-                        Intent intent = new Intent(view.getContext(), MainActivity.class);
-                        intent.putExtra("newDeviceName", newDeviceName);
-                        intent.putExtra("position", position);
-                        startActivityForResult(intent, REQUEST_CODE_EXAMPLE2);
+                        SharedPreferences.Editor editor = devName.edit();
+                        editor.putString(getIntent().getStringExtra("deviceKey"), newDeviceName);
+                        editor.commit();
+                        deviceNameText.setText(newDeviceName);
+
+//                        Intent intent = new Intent(view.getContext(), MainActivity.class);
+////                        intent.putExtra("newDeviceName", newDeviceName);
+//                        intent.putExtra("checkName", 1);
+//                        startActivityForResult(intent, REQUEST_CODE_EXAMPLE2);
+
                         mPopUpRename.dismiss();
                     }
                 });
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @Override
