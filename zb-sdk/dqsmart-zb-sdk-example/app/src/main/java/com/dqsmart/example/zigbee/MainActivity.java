@@ -209,21 +209,73 @@ public class MainActivity extends AppCompatActivity {
 //            finish();
 //        }
 
-
+//        if(getIntent().hasExtra("voiceStatus")){
+//            int voiceStatus = getIntent().getBooleanExtra("voiceStatus", false) ? 1 : 0;
+//            String voiceKey = getIntent().getStringExtra("voiceKey");
+//                SharedPreferences.Editor editor = statusMap.edit();
+//                editor.putInt(voiceKey, voiceStatus);
+//                editor.commit();
+//                mDeviceAdapter.getmDevStatusMap().put(voiceKey, voiceStatus);
+//
+//                if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
+//                    for(ZigbeeDevice zigbeeDevice : mDeviceAdapter.getmZigbeeDevices()){
+//                        Toast.makeText(this, "key: " + mDeviceAdapter.getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()), Toast.LENGTH_SHORT).show();
+//                        if(mDeviceAdapter.getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()).equals(voiceKey) ){
+//                            if(mDeviceAdapter.getmListener() != null){
+//                                mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, voiceStatus);
+//                            }
+//                        }
+//                    }
+////                    ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
+////                    if(mDeviceAdapter.getmListener() != null){
+////                        mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
+////                    }
+//                }
+//            Intent data = new Intent();
+//            data.putExtra(EXTRA_DATA, "nhan r ha");
+//            setResult(Activity.RESULT_OK, data);
+//            finish();
+//        }
         if(getIntent().hasExtra("newStatus")){
             int newStatus = getIntent().getBooleanExtra("newStatus", false) ? 1 : 0;
-            int position = getIntent().getIntExtra("position",0);
-            SharedPreferences.Editor editor = statusMap.edit();
-            editor.putInt(String.format("%04X", mDeviceAdapter.getmZigbeeDevices().get(position).getSrcAddress()) + "." + mDeviceAdapter.getmZigbeeDevices().get(position).getEndpoint(), newStatus);
-            editor.commit();
-            mDeviceAdapter.getmDevStatusMap().put(String.format("%04X", mDeviceAdapter.getmZigbeeDevices().get(position).getSrcAddress()) + "." + mDeviceAdapter.getmZigbeeDevices().get(position).getEndpoint(), newStatus);
 
-            if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
-                ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
-                if(mDeviceAdapter.getmListener() != null){
-                    mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
+            // Controlled by switch
+            if(getIntent().hasExtra("position")){
+                int position = getIntent().getIntExtra("position",0);
+                SharedPreferences.Editor editor = statusMap.edit();
+                editor.putInt(String.format("%04X", mDeviceAdapter.getmZigbeeDevices().get(position).getSrcAddress()) + "." + mDeviceAdapter.getmZigbeeDevices().get(position).getEndpoint(), newStatus);
+                editor.commit();
+                mDeviceAdapter.getmDevStatusMap().put(String.format("%04X", mDeviceAdapter.getmZigbeeDevices().get(position).getSrcAddress()) + "." + mDeviceAdapter.getmZigbeeDevices().get(position).getEndpoint(), newStatus);
+
+                if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
+                    ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
+                    if(mDeviceAdapter.getmListener() != null){
+                        mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
+                    }
                 }
             }
+            // Controlled by voice
+            if(getIntent().hasExtra("voiceKey")){
+                String voiceKey = getIntent().getStringExtra("voiceKey");
+                SharedPreferences.Editor editor = statusMap.edit();
+                editor.putInt(voiceKey, newStatus);
+                editor.commit();
+                mDeviceAdapter.getmDevStatusMap().put(voiceKey, newStatus);
+                if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
+                    for(ZigbeeDevice zigbeeDevice : mDeviceAdapter.getmZigbeeDevices()){
+                        if(mDeviceAdapter.getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()).equals(voiceKey) ){
+                            if(mDeviceAdapter.getmListener() != null){
+                                mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
+                            }
+                        }
+                    }
+//                    ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
+//                    if(mDeviceAdapter.getmListener() != null){
+//                        mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
+//                    }
+                }
+            }
+
             Intent data = new Intent();
             data.putExtra(EXTRA_DATA, "nhan r ha");
             setResult(Activity.RESULT_OK, data);

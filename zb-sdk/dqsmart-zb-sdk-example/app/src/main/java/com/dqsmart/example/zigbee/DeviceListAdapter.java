@@ -105,7 +105,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
         notifyDataSetChanged();
     }
 
-    private String getDeviceKey(int shortAddress, int endpoint) {
+    public String getDeviceKey(int shortAddress, int endpoint) {
         return String.format("%04X", shortAddress) + "." + endpoint;
     }
 

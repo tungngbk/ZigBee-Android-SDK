@@ -23,9 +23,12 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 public class VoiceActivity extends AppCompatActivity {
-
+    private static final int REQUEST_CODE_EXAMPLE = 0x9345;
+    SharedPreferences sharedPreferences;
     ImageButton imageButton;
     EditText editText;
     SpeechRecognizer speechRecognizer;
@@ -35,6 +38,9 @@ public class VoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice);
+        sharedPreferences = getSharedPreferences("devName", Context.MODE_PRIVATE);
+        Map<String, String> map = (Map<String, String>) sharedPreferences.getAll();
+
 
         imageButton = findViewById(R.id.testbtn);
 
@@ -50,12 +56,12 @@ public class VoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                  if(count == 0){
-                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_account_circle ));
+                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice ));
                      speechRecognizer.startListening(speechRecognizerIntent);
                      count = 1;
                  }
                  else {
-                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice ));
+                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice_off ));
                      speechRecognizer.stopListening();
                      count = 0;
                  }
@@ -96,6 +102,26 @@ public class VoiceActivity extends AppCompatActivity {
             @Override
             public void onResults(Bundle bundle) {
                 ArrayList<String> data = bundle.getStringArrayList(speechRecognizer.RESULTS_RECOGNITION);
+
+                Set<String> set = map.keySet();
+                String voiceResult = data.get(0).toLowerCase();
+                for(String key : set){
+                    if(voiceResult.contains(map.get(key).toLowerCase())){
+                        if(voiceResult.contains("turn on")){
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.putExtra("newStatus", true);
+                            intent.putExtra("voiceKey", key);
+                            startActivityForResult(intent, REQUEST_CODE_EXAMPLE);
+                        }
+                        else if(voiceResult.contains("turn off")){
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.putExtra("newStatus", false);
+                            intent.putExtra("voiceKey", key);
+                            startActivityForResult(intent, REQUEST_CODE_EXAMPLE);
+                        }
+                    }
+
+                }
                 editText.setText(data.get(0));
             }
 
@@ -127,7 +153,20 @@ public class VoiceActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_EXAMPLE){
+            if(resultCode == Activity.RESULT_OK){
+                final String result = data.getStringExtra(MainActivity.EXTRA_DATA);
+//                Toast.makeText(this, "Result: " + result, Toast.LENGTH_SHORT).show();
+            }
+            else{
 
+            }
+        }
+
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
