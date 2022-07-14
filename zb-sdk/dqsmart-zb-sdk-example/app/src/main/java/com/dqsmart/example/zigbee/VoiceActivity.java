@@ -11,10 +11,7 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +27,7 @@ public class VoiceActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_EXAMPLE = 0x9345;
     SharedPreferences sharedPreferences;
     ImageButton imageButton;
-    EditText editText;
+    TextView editText;
     SpeechRecognizer speechRecognizer;
     int count = 0;
 
@@ -56,7 +53,7 @@ public class VoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                  if(count == 0){
-                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice ));
+                     imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice_on ));
                      speechRecognizer.startListening(speechRecognizerIntent);
                      count = 1;
                  }
@@ -107,13 +104,13 @@ public class VoiceActivity extends AppCompatActivity {
                 String voiceResult = data.get(0).toLowerCase();
                 for(String key : set){
                     if(voiceResult.contains(map.get(key).toLowerCase())){
-                        if(voiceResult.contains("turn on")){
+                        if(voiceResult.contains("bật") || voiceResult.contains("bậc") || voiceResult.contains("mở")){
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.putExtra("newStatus", true);
                             intent.putExtra("voiceKey", key);
                             startActivityForResult(intent, REQUEST_CODE_EXAMPLE);
                         }
-                        else if(voiceResult.contains("turn off")){
+                        else if(voiceResult.contains("tắt")  || voiceResult.contains("ngắt") || voiceResult.contains("ngắc")){
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             intent.putExtra("newStatus", false);
                             intent.putExtra("voiceKey", key);

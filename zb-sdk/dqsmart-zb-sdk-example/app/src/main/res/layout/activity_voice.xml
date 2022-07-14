@@ -86,16 +86,52 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@id/viewDivider"
+            app:layout_constraintTop_toBottomOf="@id/layoutHeader" tools:layout_editor_absoluteX="0dp"
+            app:layout_constraintVertical_bias="0.0">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" tools:ignore="MissingConstraints">
-
+                android:layout_height="0dp">
+            <ImageView
+                    android:layout_width="400dp"
+                    android:layout_height="300dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/smart_home_thumbnail"
+                    android:id="@+id/imageView2"
+                    app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+            </ImageView>
+            <ImageButton
+                    android:background="@drawable/custom_voice"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:id="@+id/testbtn"
+                    android:src="@drawable/ic_voice_off"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.498"/>
+            <TextView
+                    android:gravity="center"
+                    android:id="@+id/testedit"
+                    android:hint="Press the mic button to start voice commands"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/testbtn"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
-
+    </ScrollView>
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,25 +142,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/navigation_menu"/>
 
+
     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:id="@+id/viewDivider"
             android:background="@color/colorDivider"
             app:layout_constraintBottom_toTopOf="@id/bottomNavigationView" />
-    <ImageButton
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:id="@+id/testbtn"
-            android:src="@drawable/ic_voice_off"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteY="260dp" tools:layout_editor_absoluteX="121dp"/>
-    <EditText
-            android:id="@+id/testedit"
-            android:hint="Input ..."
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints" tools:layout_editor_absoluteY="557dp"
-            tools:layout_editor_absoluteX="201dp"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
