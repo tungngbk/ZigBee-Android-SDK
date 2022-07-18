@@ -124,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Get Device Info"
+                        android:text="About USB"
                         android:textSize="20sp"
                         android:textStyle="bold"
                 />

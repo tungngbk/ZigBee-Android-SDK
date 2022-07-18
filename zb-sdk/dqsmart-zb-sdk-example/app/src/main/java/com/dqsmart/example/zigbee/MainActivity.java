@@ -115,13 +115,15 @@ public class MainActivity extends AppCompatActivity {
         mGetDevInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String deviceId = DqsZbNwkManager.getInstance().getDeviceId();
+                String zigbeeVersion = DqsZbNwkManager.getInstance().getZbVersion();
+                String zigbeeId = DqsZbNwkManager.getInstance().getDeviceId();
+                String zigbeeInfo = "Zigbee version: " + zigbeeVersion + '\n' + "Device ID: " + zigbeeId;
                 mPopUpInfo.setContentView(R.layout.info_popup);
                 mPopUpInfo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 mDevIdText = mPopUpInfo.findViewById(R.id.text_device_id);
-                mDevIdText.setText(deviceId);
+                mDevIdText.setText(zigbeeInfo);
                 mPopUpInfo.show();
-                Log.d(TAG, "Test get device ID: " + deviceId);
+                Log.d(TAG, "Test get Zigbee Info: " + zigbeeInfo);
             }
         });
 
@@ -287,8 +289,23 @@ public class MainActivity extends AppCompatActivity {
         mResetFactory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DqsZbNwkManager.getInstance().resetFactory();
-                Toast.makeText(MainActivity.this, "Reset successfully", Toast.LENGTH_SHORT).show();
+//                DqsZbNwkManager.getInstance().resetFactory();
+//                Toast.makeText(MainActivity.this, "Reset successfully", Toast.LENGTH_SHORT).show();
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Reset Paired Device")
+                        .setMessage("Do you want to disconnect all your devices ?")
+                        .setPositiveButton("Ok", null)
+                        .setNegativeButton("Cancel", null)
+                        .show();
+                Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DqsZbNwkManager.getInstance().resetFactory();
+                        Toast.makeText(MainActivity.this, "Reset successfully", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
+                    }
+                });
             }
         });
     }
