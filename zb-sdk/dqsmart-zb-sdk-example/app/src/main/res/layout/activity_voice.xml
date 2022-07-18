@@ -109,7 +109,7 @@
                     app:layout_constraintStart_toStartOf="parent">
             </ImageView>
             <ImageButton
-                    android:background="@drawable/custom_voice"
+                    android:background="@drawable/custom_voice_off"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:id="@+id/testbtn"

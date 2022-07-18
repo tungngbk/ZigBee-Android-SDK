@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity {
         mDeviceAdapter.setmDevStatusMap(new ConcurrentHashMap<String, Integer>(map));
         mDeviceAdapter.setmDevNameMap(new ConcurrentHashMap<String, String>(nameMap));
 
-//
-//        mDeviceAdapter.setZigbeeDevices(CacheManager.getInstance().getAllDevices());
 
         // Get ZigBee USB ID
         mPopUpInfo = new Dialog(this);
@@ -134,10 +132,7 @@ public class MainActivity extends AppCompatActivity {
         hashMap.put("DOOR LOCK", DeviceModel.ZB_DOOR_LOCK);
         hashMap.put("RE6 SWITCH", DeviceModel.ZB_RE6_SWITCH);
         hashMap.put("SMOKE SENSOR", DeviceModel.ZB_SMOKE_SENSOR);
-//        list.add(DeviceModel.ZB_SMART_SOCKET);
-//        list.add(DeviceModel.ZB_DOOR_LOCK);
-//        list.add(DeviceModel.ZB_RE6_SWITCH);
-//        list.add(DeviceModel.ZB_SMOKE_SENSOR);
+
         list.add("SMART SOCKET");
         list.add("DOOR LOCK");
         list.add("RE6 SWITCH");
@@ -188,56 +183,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        if(getIntent().hasExtra("newDeviceName")){
-//            String newDeviceName = getIntent().getStringExtra("newDeviceName");
-//            int position = getIntent().getIntExtra("position",0);
-//            if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
-//                ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
-//                mDeviceAdapter.setCheckPosition(position);
-//                mDeviceAdapter.setNewDevName(newDeviceName);
-//            }
-////            Intent data = new Intent();
-////            data.putExtra(EXTRA_DATA, "nhan r he");
-////            setResult(Activity.RESULT_OK, data);
-////            finish();
-//        }
-//        if(getIntent().hasExtra("checkName")){
-//            Map<String, String> nameMap1 = (Map<String, String>) devName.getAll();
-//            mDeviceAdapter.setmDevNameMap(new ConcurrentHashMap<String, String>(nameMap1));
-//
-//            Intent data = new Intent();
-//            data.putExtra(EXTRA_DATA, "ok ne");
-//            setResult(Activity.RESULT_OK, data);
-//            finish();
-//        }
-
-//        if(getIntent().hasExtra("voiceStatus")){
-//            int voiceStatus = getIntent().getBooleanExtra("voiceStatus", false) ? 1 : 0;
-//            String voiceKey = getIntent().getStringExtra("voiceKey");
-//                SharedPreferences.Editor editor = statusMap.edit();
-//                editor.putInt(voiceKey, voiceStatus);
-//                editor.commit();
-//                mDeviceAdapter.getmDevStatusMap().put(voiceKey, voiceStatus);
-//
-//                if(!mDeviceAdapter.getmZigbeeDevices().isEmpty()){
-//                    for(ZigbeeDevice zigbeeDevice : mDeviceAdapter.getmZigbeeDevices()){
-//                        Toast.makeText(this, "key: " + mDeviceAdapter.getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()), Toast.LENGTH_SHORT).show();
-//                        if(mDeviceAdapter.getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint()).equals(voiceKey) ){
-//                            if(mDeviceAdapter.getmListener() != null){
-//                                mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, voiceStatus);
-//                            }
-//                        }
-//                    }
-////                    ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
-////                    if(mDeviceAdapter.getmListener() != null){
-////                        mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
-////                    }
-//                }
-//            Intent data = new Intent();
-//            data.putExtra(EXTRA_DATA, "nhan r ha");
-//            setResult(Activity.RESULT_OK, data);
-//            finish();
-//        }
         if(getIntent().hasExtra("newStatus")){
             int newStatus = getIntent().getBooleanExtra("newStatus", false) ? 1 : 0;
 
@@ -271,10 +216,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
-//                    ZigbeeDevice zigbeeDevice = mDeviceAdapter.getmZigbeeDevices().get(position);
-//                    if(mDeviceAdapter.getmListener() != null){
-//                        mDeviceAdapter.getmListener().onDeviceStatusClick(zigbeeDevice, newStatus);
-//                    }
                 }
             }
 
@@ -289,8 +230,6 @@ public class MainActivity extends AppCompatActivity {
         mResetFactory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                DqsZbNwkManager.getInstance().resetFactory();
-//                Toast.makeText(MainActivity.this, "Reset successfully", Toast.LENGTH_SHORT).show();
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Reset Paired Device")
                         .setMessage("Do you want to disconnect all your devices ?")

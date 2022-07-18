@@ -54,11 +54,13 @@ public class VoiceActivity extends AppCompatActivity {
             public void onClick(View view) {
                  if(count == 0){
                      imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice_on ));
+                     imageButton.setBackground(getDrawable(R.drawable.custom_voice));
                      speechRecognizer.startListening(speechRecognizerIntent);
                      count = 1;
                  }
                  else {
                      imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice_off ));
+                     imageButton.setBackground(getDrawable(R.drawable.custom_voice_off));
                      speechRecognizer.stopListening();
                      count = 0;
                  }
