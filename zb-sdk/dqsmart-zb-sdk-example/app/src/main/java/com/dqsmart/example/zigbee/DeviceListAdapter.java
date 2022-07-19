@@ -129,7 +129,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             holder.devNameText.setText(this.mDevNameMap.get(getDeviceKey(zigbeeDevice.getSrcAddress(), zigbeeDevice.getEndpoint())));
         }
         else {
-            holder.devNameText.setText("chua dat ten");
+            holder.devNameText.setText("Unnamed");
         }
 //        if(this.newDevName != null){
 ////            Toast.makeText(mContext, "toi day", Toast.LENGTH_SHORT).show();
