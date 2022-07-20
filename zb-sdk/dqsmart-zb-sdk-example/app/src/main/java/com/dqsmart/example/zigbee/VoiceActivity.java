@@ -90,7 +90,10 @@ public class VoiceActivity extends AppCompatActivity {
 
             @Override
             public void onEndOfSpeech() {
-
+                imageButton.setImageDrawable(getDrawable(R.drawable.ic_voice_off ));
+                imageButton.setBackground(getDrawable(R.drawable.custom_voice_off));
+                speechRecognizer.stopListening();
+                count = 0;
             }
 
             @Override
